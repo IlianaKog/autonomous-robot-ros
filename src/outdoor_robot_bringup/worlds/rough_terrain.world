@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="rough_terrain">
+    <!-- Include basic sun and ground plane -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Define Spherical Coordinates Datum -->
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>37.9838</latitude_deg>
+      <longitude_deg>23.7275</longitude_deg>
+      <elevation>0.0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+    <!-- The RED Target Object for perception inspection phase -->
+    <model name="red_target_box">
+      <pose>4.0 3.0 0.25 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.5 0.5 0.5</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.5 0.5 0.5</size></box>
+          </geometry>
+          <material>
+            <ambient>1.0 0.0 0.0 1</ambient>
+            <diffuse>1.0 0.0 0.0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="outdoor_robot">
+
+  <!-- Include Gazebo plugins -->
+  <xacro:include filename="gazebo_plugins.xacro" />
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.6 0.4 0.2"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.6 0.4 0.2"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="15.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.25" ixy="0" ixz="0" iyy="0.5" iyz="0" izz="0.65"/>
+    </inertial>
+  </link>
+
+  <!-- Left Wheel -->
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.15" length="0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.15" length="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.011" ixy="0" ixz="0" iyy="0.011" iyz="0" izz="0.0225"/>
+    </inertial>
+  </link>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0 0.225 -0.05" rpy="-1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Right Wheel -->
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.15" length="0.05"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.15" length="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.011" ixy="0" ixz="0" iyy="0.011" iyz="0" izz="0.0225"/>
+    </inertial>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0 -0.225 -0.05" rpy="-1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Caster Wheel -->
+  <link name="caster_wheel">
+    <visual>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_wheel"/>
+    <origin xyz="-0.25 0 -0.18" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Give caster zero friction in gazebo -->
+  <gazebo reference="caster_wheel">
+    <mu1>0.001</mu1>
+    <mu2>0.001</mu2>
+  </gazebo>
+
+  <!-- Sensor Links -->
+  
+  <!-- IMU -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <!-- GPS -->
+  <link name="gps_link"/>
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="-0.1 0.0 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <!-- LiDAR -->
+  <link name="lidar_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.05" length="0.05"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.2 0.0 0.125" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Camera -->
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.08 0.04"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.3 0.0 0.05" rpy="0 0 0"/>
+  </joint>
+  
+  <!-- Optical Frame for Camera -->
+  <link name="camera_link_optical"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+  </joint>
+
+</robot>
