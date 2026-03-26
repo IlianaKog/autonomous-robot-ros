@@ -49,7 +49,7 @@ private:
 
       for (const auto& contour : contours) {
         double area = cv::contourArea(contour);
-        if (area > 20000.0) { // Large red blob detected at close range!
+        if (area > 15000.0) { // Red blob detected at close range
           RCLCPP_WARN(this->get_logger(), "RED TARGET DETECTED! Area: %.2f", area);
           handle_target_detection(frame);
           break; // Stop checking further contours

@@ -19,9 +19,9 @@ public:
 
     // X, Y map coordinates (meters)
     waypoints_ = {
-      {3.0, 0.0},
-      {4.0, 0.0},
-      {4.0, 2.75}
+      {2.0, 0.0},
+      {2.0, 2.0},
+      {3.7, 3.0}
     };
 
     timer_ = this->create_wall_timer(

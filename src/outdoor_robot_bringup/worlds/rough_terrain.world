@@ -20,7 +20,7 @@
 
     <!-- Static rock obstacle -->
     <model name="rock_obstacle">
-      <pose>3.5 0.0 0.2 0 0 0</pose>
+      <pose>2.0 1.0 0.2 0 0 0</pose>
       <static>true</static>
       <link name="link">
         <collision name="collision">
