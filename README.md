@@ -6,7 +6,7 @@ This repository contains a full ROS 2 simulation for an autonomous differential-
 * **Custom URDF & Simulation**: Differential drive robot with sensor plugins operating in a rough terrain Gazebo world.
 * **Localization & Sensor Fusion**: Advanced dual-EKF setup using `robot_localization` (Local: IMU+Odom, Global: GPS+IMU+Odom).
 * **Autonomous Navigation**: `Nav2` configured for outdoor autonomous path planning using local and global costmaps.
-* **Waypoint Mission Node**: Custom C++ Action Client that requests `navsat_transform_node` for GPS-to-Map translation and sequences Nav2 goals.
+* **Waypoint Mission Node**: Custom C++ Action Client that sequences predefined map-coordinate waypoints through Nav2 goals.
 * **Perception & Behavior**: Custom C++ OpenCV node that detects target red objects, halts the robot momentarily, and captures inspection images to disk.
 
 ---
@@ -32,8 +32,7 @@ graph TD
     EKF_Global -->|map -> odom TF| State
 
     %% Navigation & Mission
-    MissionNode[C++ Mission Node] -->|FromLL Service Request| NavSat
-    MissionNode -->|NavigateToPose Action| Nav2
+    MissionNode[C++ Mission Node] -->|NavigateToPose Action| Nav2
     Nav2 -->|/cmd_vel_nav| TwistMux[twist_mux]
 
     %% Perception Output
@@ -61,8 +60,8 @@ A single EKF fusing continuous odometry (wheels/IMU) and discrete, absolute posi
 ### Global Planner: NavFn vs. Smac
 **NavFn (A*)** was chosen over the Smac planner. While Smac is excellent for complex structured environments (like tight warehouses or ackermann-kinematics), open outdoor GPS-based navigation benefits more from the computational speed and simplicity of NavFn for A-to-B routing.
 
-### Costmap Inflation Radius (0.55m)
-The inflation radius is set aggressively to `0.55m` with a cost scaling factor of `3.0` to force the robot to maintain a wide berth from rough terrain bumps. In outdoor environments, clipping an obstacle can cause the robot's undercarriage to get physically stuck on rocks, so we strongly penalize paths that graze obstacles.
+### Costmap Inflation Radius (0.25m)
+The inflation radius is set to `0.25m` with a cost scaling factor of `1.5`. The current world contains only the red inspection target box, so a conservative inflation radius is sufficient to ensure reliable path planning without over-inflating the single obstacle.
 
 ---
 
@@ -136,7 +135,7 @@ ros2 run outdoor_robot_perception inspection_behavior_node
 *Note: Ensure you source `install/setup.bash` in every new terminal.*
 
 ### 5. Execute the Autonomous Mission
-Kick off the autonomous waypoint sequencer. The node will calculate map coordinates from the predefined GPS list and dispatch the robot:
+Kick off the autonomous waypoint sequencer. The node will navigate the robot through predefined map-coordinate waypoints:
 ```bash
 ros2 run outdoor_robot_mission gps_waypoint_follower
 ```
