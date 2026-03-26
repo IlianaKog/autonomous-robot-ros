@@ -60,8 +60,8 @@ A single EKF fusing continuous odometry (wheels/IMU) and discrete, absolute posi
 ### Global Planner: NavFn vs. Smac
 **NavFn (A*)** was chosen over the Smac planner. While Smac is excellent for complex structured environments (like tight warehouses or ackermann-kinematics), open outdoor GPS-based navigation benefits more from the computational speed and simplicity of NavFn for A-to-B routing.
 
-### Costmap Inflation Radius (0.25m)
-The inflation radius is set to `0.25m` with a cost scaling factor of `1.5`. The current world contains only the red inspection target box, so a conservative inflation radius is sufficient to ensure reliable path planning without over-inflating the single obstacle.
+### Costmap Inflation Radius (0.35m)
+The inflation radius is set to `0.35m` with a cost scaling factor of `2.0`. This provides enough clearance for the robot to safely navigate around obstacles while keeping paths open in the relatively simple outdoor environment.
 
 ---
 
